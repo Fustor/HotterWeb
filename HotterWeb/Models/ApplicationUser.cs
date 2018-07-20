@@ -11,6 +11,6 @@ namespace HotterWeb.Models
     {
         public string Name { get; set; }
         public string IdNumber { get; set; }
-        public string RestaurantId { get; set; }
+        public string LocationId { get; set; }
     }
 }

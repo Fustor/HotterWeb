@@ -11,9 +11,10 @@ using System;
 namespace HotterWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180720171717_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,8 +38,6 @@ namespace HotterWeb.Data.Migrations
 
                     b.Property<string>("IdNumber");
 
-                    b.Property<string>("LocationId");
-
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
@@ -56,6 +55,8 @@ namespace HotterWeb.Data.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("RestaurantId");
 
                     b.Property<string>("SecurityStamp");
 

@@ -9,6 +9,18 @@ namespace HotterWeb.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Employee ID")]
+        public string IdNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Location ID")]
+        public string LocationId { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
