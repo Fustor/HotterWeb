@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotterWeb", "HotterWeb\HotterWeb.csproj", "{59668B24-EE88-41AE-8585-44F10F8611CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotterWeb", "HotterWeb\HotterWeb.csproj", "{59668B24-EE88-41AE-8585-44F10F8611CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
