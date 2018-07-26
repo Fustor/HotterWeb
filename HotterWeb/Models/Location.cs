@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace HotterWeb.Models
 {
@@ -15,13 +16,11 @@ namespace HotterWeb.Models
         public string LocationName { get; set; }
         public string LocationAddress { get; set; }
 
-        public Location(string Id, string Name, string Address)
-        {
-            LocationId = Id;
-            LocationName = Name;
-            LocationAddress = Address;
-        }
+        
 
-        public Location() { }
+        public class LocationDBContext : DbContext 
+        {
+            DbSet<Location> Locations { get; set; }
+        }
     }
 }

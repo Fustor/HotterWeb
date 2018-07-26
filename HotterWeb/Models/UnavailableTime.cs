@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace HotterWeb.Models
 {
@@ -13,24 +14,21 @@ namespace HotterWeb.Models
         public Guid ID { get; set; }
 
         [ForeignKey("ApplicationUser")]
-        public string EmployeeId { get; set; }
+        public string IdNumber { get; set; }
 
-        [Required]
-        public ApplicationUser ApplicationUser { get; set; }
+        
+        public virtual ApplicationUser ApplicationUser { get; set; }
 
         public DateTime Day { get; set; }
         public string BeginningTime { get; set; }
         public string EndTime { get; set; }
         
 
-        public UnavailableTime() { }
+        
 
-        public UnavailableTime(DateTime _Day, string Id, string _BeginningTime, string _EndTime)
+        public class UnavailableTimeDBContext : DbContext
         {
-            Day = _Day;
-            EmployeeId = Id;
-            BeginningTime = _BeginningTime;
-            EndTime = _EndTime;
+            DbSet<UnavailableTime> UnavailableTimes { get; set; }
         }
     }
 }

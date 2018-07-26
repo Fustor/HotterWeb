@@ -22,5 +22,15 @@ namespace HotterWeb.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<HotterWeb.Models.Location> Location { get; set; }
+
+        public DbSet<HotterWeb.Models.Job> Job { get; set; }
+
+        public DbSet<HotterWeb.Models.Schedule> Schedule { get; set; }
+
+        public DbSet<HotterWeb.Models.RequestOff> RequestOff { get; set; }
+
+        public DbSet<HotterWeb.Models.UnavailableTime> UnavailableTime { get; set; }
     }
 }

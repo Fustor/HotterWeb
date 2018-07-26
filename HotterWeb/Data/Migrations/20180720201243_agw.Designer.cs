@@ -11,9 +11,10 @@ using System;
 namespace HotterWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180720201243_agw")]
+    partial class agw
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +35,9 @@ namespace HotterWeb.Data.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("IdNumber")
+                        .IsRequired();
 
                     b.Property<string>("LocationId");
 
@@ -63,6 +67,8 @@ namespace HotterWeb.Data.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("IdNumber");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");

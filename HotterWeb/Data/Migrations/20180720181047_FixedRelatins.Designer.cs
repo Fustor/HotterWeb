@@ -11,9 +11,10 @@ using System;
 namespace HotterWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180720181047_FixedRelatins")]
+    partial class FixedRelatins
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +35,8 @@ namespace HotterWeb.Data.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("IdNumber");
 
                     b.Property<string>("LocationId");
 
@@ -73,97 +76,6 @@ namespace HotterWeb.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.Job", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("IdNumber");
-
-                    b.Property<string>("JobTitle");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("IdNumber");
-
-                    b.ToTable("Job");
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.Location", b =>
-                {
-                    b.Property<string>("LocationId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("LocationAddress");
-
-                    b.Property<string>("LocationName");
-
-                    b.HasKey("LocationId");
-
-                    b.ToTable("Location");
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.RequestOff", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DayOff");
-
-                    b.Property<string>("IdNumber")
-                        .IsRequired();
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("IdNumber");
-
-                    b.ToTable("RequestOff");
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.Schedule", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ClockIn");
-
-                    b.Property<string>("ClockOut");
-
-                    b.Property<DateTime>("Day");
-
-                    b.Property<string>("IdNumber")
-                        .IsRequired();
-
-                    b.Property<string>("Position");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("IdNumber");
-
-                    b.ToTable("Schedule");
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.UnavailableTime", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("BeginningTime");
-
-                    b.Property<DateTime>("Day");
-
-                    b.Property<string>("EndTime");
-
-                    b.Property<string>("IdNumber")
-                        .IsRequired();
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("IdNumber");
-
-                    b.ToTable("UnavailableTime");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -272,37 +184,6 @@ namespace HotterWeb.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.Job", b =>
-                {
-                    b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("IdNumber");
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.RequestOff", b =>
-                {
-                    b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("IdNumber")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.Schedule", b =>
-                {
-                    b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("IdNumber")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.UnavailableTime", b =>
-                {
-                    b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("IdNumber")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

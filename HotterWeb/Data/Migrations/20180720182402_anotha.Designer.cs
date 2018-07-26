@@ -11,9 +11,10 @@ using System;
 namespace HotterWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180720182402_anotha")]
+    partial class anotha
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +35,8 @@ namespace HotterWeb.Data.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("IdNumber");
 
                     b.Property<string>("LocationId");
 
@@ -80,13 +83,14 @@ namespace HotterWeb.Data.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("IdNumber");
+                    b.Property<string>("EmployeeId")
+                        .IsRequired();
 
                     b.Property<string>("JobTitle");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("IdNumber");
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Job");
                 });
@@ -112,12 +116,12 @@ namespace HotterWeb.Data.Migrations
 
                     b.Property<DateTime>("DayOff");
 
-                    b.Property<string>("IdNumber")
+                    b.Property<string>("EmployeeId")
                         .IsRequired();
 
                     b.HasKey("ID");
 
-                    b.HasIndex("IdNumber");
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("RequestOff");
                 });
@@ -133,14 +137,14 @@ namespace HotterWeb.Data.Migrations
 
                     b.Property<DateTime>("Day");
 
-                    b.Property<string>("IdNumber")
+                    b.Property<string>("EmployeeId")
                         .IsRequired();
 
                     b.Property<string>("Position");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("IdNumber");
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Schedule");
                 });
@@ -154,14 +158,14 @@ namespace HotterWeb.Data.Migrations
 
                     b.Property<DateTime>("Day");
 
-                    b.Property<string>("EndTime");
-
-                    b.Property<string>("IdNumber")
+                    b.Property<string>("EmployeeId")
                         .IsRequired();
+
+                    b.Property<string>("EndTime");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("IdNumber");
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("UnavailableTime");
                 });
@@ -278,14 +282,15 @@ namespace HotterWeb.Data.Migrations
                 {
                     b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("IdNumber");
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("HotterWeb.Models.RequestOff", b =>
                 {
                     b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("IdNumber")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -293,7 +298,7 @@ namespace HotterWeb.Data.Migrations
                 {
                     b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("IdNumber")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -301,7 +306,7 @@ namespace HotterWeb.Data.Migrations
                 {
                     b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("IdNumber")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.Entity;
 
 namespace HotterWeb.Models
 {
@@ -13,19 +14,26 @@ namespace HotterWeb.Models
         public Guid ID { get; set; }
 
         public string JobTitle { get; set; }
-        
+
         [ForeignKey("ApplicationUser")]
-        public string EmployeeId { get; set; }
-
-        [Required]
-        public ApplicationUser ApplicationUser { get; set; }
-
-        public Job() { }
-
-        public Job(string Id, string Title)
+        public string IdNumber { get; set; }
+        
+        
+        public virtual ApplicationUser ApplicationUser { get; set; }
+        
+        //public Job() { }
+        /*
+        public Job(string Id, string Title,string IDN)
         {
-            EmployeeId = Id;
+            IdNumber = Id;
             JobTitle = Title;
         }
+        */
+        
+        public class JobDBContext : DbContext
+        {
+            public DbSet<Job> Jobs { get; set; }
+        }
+        
     }
 }

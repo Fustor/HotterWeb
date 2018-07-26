@@ -11,9 +11,10 @@ using System;
 namespace HotterWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180720183329_new")]
+    partial class @new
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +35,9 @@ namespace HotterWeb.Data.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("IdNumber")
+                        .IsRequired();
 
                     b.Property<string>("LocationId");
 
@@ -64,6 +68,8 @@ namespace HotterWeb.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("IdNumber");
+
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
 
@@ -80,7 +86,8 @@ namespace HotterWeb.Data.Migrations
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("IdNumber");
+                    b.Property<string>("IdNumber")
+                        .IsRequired();
 
                     b.Property<string>("JobTitle");
 
@@ -278,7 +285,8 @@ namespace HotterWeb.Data.Migrations
                 {
                     b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("IdNumber");
+                        .HasForeignKey("IdNumber")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("HotterWeb.Models.RequestOff", b =>
