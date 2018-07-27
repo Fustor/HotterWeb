@@ -71,6 +71,16 @@ namespace HotterWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                /* TODO: find a way to add manager jobs to already created user, Maybe not use boolean to track
+                if(job.JobTitle == "Manager" || job.JobTitle == "manager")
+                {
+                    var manager = new ApplicationUser() { Id = job.IdNumber, Manager = true };
+                    _context.Users.Attach(manager);
+                    _context.Entry(manager).Property(x => x.Manager).IsModified = true;
+                    _context.SaveChanges();
+                    
+                }
+                */
                 job.ID = Guid.NewGuid();
                 _context.Add(job);
                 await _context.SaveChangesAsync();

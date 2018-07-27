@@ -14,6 +14,7 @@ namespace HotterWeb.Models
       
         public string LocationId { get; set; }
 
+        public bool Manager { get; set; }
         public string GetUserId()
         {
             return this.Id;

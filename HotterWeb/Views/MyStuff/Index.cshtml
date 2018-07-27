@@ -1,10 +1,132 @@
-﻿
+﻿@model HotterWeb.Models.MyStuffViewModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "My Stuff";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+    //TODO make this a profile page for users
+}
+<h2>My Schedule</h2>
 
-<h2>Index</h2>
+<table class="table">
+      <thead>
+          <tr>
+              <th>
+                  Position
+              </th>
+              <th>
+                  Date
+              </th>
+              <th>
+                  Clock In
+              </th>
+              <th>
+                  Clock Out
+              </th>
+          </tr>
+      </thead>  
+    <tbody>
 
-<p>Hello from our View Template!</p>
+        @foreach (var item in Model.ScheduleData)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Day)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClockIn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClockOut)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<h2>My Jobs</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Job
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.JobData)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JobTitle)
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>My Requests Off</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Day
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.RequestOffData)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DayOff)
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>My Unavailable Times</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Day
+            </th>
+            <th>
+                Start
+            </th>
+            <th>
+                End
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.UnavailableTimeData)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Day)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BeginningTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>
