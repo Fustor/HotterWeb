@@ -32,5 +32,7 @@ namespace HotterWeb.Data
         public DbSet<HotterWeb.Models.RequestOff> RequestOff { get; set; }
 
         public DbSet<HotterWeb.Models.UnavailableTime> UnavailableTime { get; set; }
+
+        public DbSet<HotterWeb.Models.Manager> Manager { get; set; }
     }
 }

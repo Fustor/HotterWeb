@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Data.Entity;
 
 namespace HotterWeb.Models
 {
-    public class Schedule
+    public class Manager
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
 
         [ForeignKey("ApplicationUser")]
         public string IdNumber { get; set; }
@@ -19,24 +18,13 @@ namespace HotterWeb.Models
         public virtual ApplicationUser ApplicationUser { get; set; }
 
         [ForeignKey("Location")]
-        public string LocationName { get; set; }
+        public string LocationId { get; set; }
 
         public virtual Location Location { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime Day { get; set; }
-
-        public string ClockIn { get; set; }
-        public string ClockOut { get; set; }
-        public string Position { get; set; }
-
-     
-
-        
-
         public class ScheduleDBContext : DbContext
         {
-            DbSet<Schedule> Schedules { get; set; }
+            DbSet<Manager> Managers { get; set; }
         }
     }
 }

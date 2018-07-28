@@ -19,6 +19,7 @@ namespace HotterWeb.Models
        
         public virtual ApplicationUser ApplicationUser { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime DayOff { get; set; }
 
         

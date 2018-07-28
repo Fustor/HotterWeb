@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using HotterWeb.Models;
 using HotterWeb.Models.AccountViewModels;
 using HotterWeb.Services;
+using HotterWeb.Data;
 
 namespace HotterWeb.Controllers
 {
@@ -20,6 +21,7 @@ namespace HotterWeb.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
@@ -29,12 +31,13 @@ namespace HotterWeb.Controllers
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _context = context;
         }
 
         [TempData]
@@ -209,6 +212,7 @@ namespace HotterWeb.Controllers
         public IActionResult Register(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId");
             return View();
         }
 
@@ -217,27 +221,51 @@ namespace HotterWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId");
             ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
+            if (_context.Location.Any(l => l.LocationId == model.LocationId))
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email,
-                Name = model.Name, LocationId = model.LocationId, Id = model.IdNumber, Manager = model.Manager};//sets Id, name, location ect..
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    var user = new ApplicationUser
+                    {
+                        UserName = model.Email,
+                        Email = model.Email,
+                        Name = model.Name,
+                        LocationId = model.LocationId,
+                        Id = model.IdNumber
+                    };//sets Id, name, location ect..
+                    var result = await _userManager.CreateAsync(user, model.Password);
+                    if (model.Manager)
+                    {
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                        var manager = new Manager() { IdNumber = model.IdNumber, LocationId = model.LocationId };
+                        _context.Manager.Add(manager);
+                        await _context.SaveChangesAsync();
+                    }
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation("User created a new account with password.");
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                        await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+
+                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        _logger.LogInformation("User created a new account with password.");
+                        return RedirectToLocal(returnUrl);
+                    }
+                    if (model.Manager)
+                    {
+
+                        var manager = new Manager() { IdNumber = model.IdNumber, LocationId = model.LocationId };
+                        _context.Manager.Add(manager);
+                        await _context.SaveChangesAsync();
+                    }
+                    AddErrors(result);
                 }
-                AddErrors(result);
             }
-
+            else { }
             // If we got this far, something failed, redisplay form
             return View(model);
         }

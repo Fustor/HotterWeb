@@ -7,29 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotterWeb.Data;
 using HotterWeb.Models;
-using System.Security.Claims;
 
 namespace HotterWeb.Controllers
 {
-    public class SchedulesController : Controller
+    public class ManagersController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public SchedulesController(ApplicationDbContext context)
+        public ManagersController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Schedules
+        // GET: Managers
         public async Task<IActionResult> Index()
         {
-            var UserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);//gets the userId 
-
-            var applicationDbContext = _context.Schedule.Where(j => j.IdNumber == UserId);//selects Schedules with specific userid
+            var applicationDbContext = _context.Manager.Include(m => m.ApplicationUser).Include(m => m.Location);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Schedules/Details/5
+        // GET: Managers/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -37,45 +34,46 @@ namespace HotterWeb.Controllers
                 return NotFound();
             }
 
-            var schedule = await _context.Schedule
-                .Include(s => s.ApplicationUser)
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (schedule == null)
+            var manager = await _context.Manager
+                .Include(m => m.ApplicationUser)
+                .Include(m => m.Location)
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (manager == null)
             {
                 return NotFound();
             }
 
-            return View(schedule);
+            return View(manager);
         }
 
-        // GET: Schedules/Create
+        // GET: Managers/Create
         public IActionResult Create()
         {
             ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["LocationName"] = new SelectList(_context.Location, "LocationName", "LocationName");
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId");
             return View();
         }
 
-        // POST: Schedules/Create
+        // POST: Managers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,IdNumber,Day,ClockIn,ClockOut,Position")] Schedule schedule)
+        public async Task<IActionResult> Create([Bind("Id,IdNumber,LocationId")] Manager manager)
         {
             if (ModelState.IsValid)
             {
-                schedule.ID = Guid.NewGuid();
-                _context.Add(schedule);
+                manager.Id = Guid.NewGuid();
+                _context.Add(manager);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", schedule.IdNumber);
-            ViewData["LocationName"] = new SelectList(_context.Location, "LocationName", "LocationName", schedule.LocationName);
-            return View(schedule);
+            ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", manager.IdNumber);
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId", manager.LocationId);
+            return View(manager);
         }
 
-        // GET: Schedules/Edit/5
+        // GET: Managers/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -83,24 +81,24 @@ namespace HotterWeb.Controllers
                 return NotFound();
             }
 
-            var schedule = await _context.Schedule.SingleOrDefaultAsync(m => m.ID == id);
-            if (schedule == null)
+            var manager = await _context.Manager.SingleOrDefaultAsync(m => m.Id == id);
+            if (manager == null)
             {
                 return NotFound();
             }
-            ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", schedule.IdNumber);
-            ViewData["LocationName"] = new SelectList(_context.Location, "LocationName", "LocationName", schedule.LocationName);
-            return View(schedule);
+            ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", manager.IdNumber);
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId", manager.LocationId);
+            return View(manager);
         }
 
-        // POST: Schedules/Edit/5
+        // POST: Managers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,IdNumber,Day,ClockIn,ClockOut,Position")] Schedule schedule)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,IdNumber,LocationId")] Manager manager)
         {
-            if (id != schedule.ID)
+            if (id != manager.Id)
             {
                 return NotFound();
             }
@@ -109,12 +107,12 @@ namespace HotterWeb.Controllers
             {
                 try
                 {
-                    _context.Update(schedule);
+                    _context.Update(manager);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ScheduleExists(schedule.ID))
+                    if (!ManagerExists(manager.Id))
                     {
                         return NotFound();
                     }
@@ -125,12 +123,12 @@ namespace HotterWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", schedule.IdNumber);
-            ViewData["LocationName"] = new SelectList(_context.Location, "LocationName", "LocationName", schedule.LocationName);
-            return View(schedule);
+            ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", manager.IdNumber);
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId", manager.LocationId);
+            return View(manager);
         }
 
-        // GET: Schedules/Delete/5
+        // GET: Managers/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -138,31 +136,32 @@ namespace HotterWeb.Controllers
                 return NotFound();
             }
 
-            var schedule = await _context.Schedule
-                .Include(s => s.ApplicationUser)
-                .SingleOrDefaultAsync(m => m.ID == id);
-            if (schedule == null)
+            var manager = await _context.Manager
+                .Include(m => m.ApplicationUser)
+                .Include(m => m.Location)
+                .SingleOrDefaultAsync(m => m.Id == id);
+            if (manager == null)
             {
                 return NotFound();
             }
 
-            return View(schedule);
+            return View(manager);
         }
 
-        // POST: Schedules/Delete/5
+        // POST: Managers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var schedule = await _context.Schedule.SingleOrDefaultAsync(m => m.ID == id);
-            _context.Schedule.Remove(schedule);
+            var manager = await _context.Manager.SingleOrDefaultAsync(m => m.Id == id);
+            _context.Manager.Remove(manager);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ScheduleExists(Guid id)
+        private bool ManagerExists(Guid id)
         {
-            return _context.Schedule.Any(e => e.ID == id);
+            return _context.Manager.Any(e => e.Id == id);
         }
     }
 }

@@ -11,9 +11,10 @@ using System;
 namespace HotterWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180728160742_bafg")]
+    partial class bafg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,13 +85,9 @@ namespace HotterWeb.Data.Migrations
 
                     b.Property<string>("JobTitle");
 
-                    b.Property<string>("LocationId");
-
                     b.HasKey("ID");
 
                     b.HasIndex("IdNumber");
-
-                    b.HasIndex("LocationId");
 
                     b.ToTable("Job");
                 });
@@ -302,10 +299,6 @@ namespace HotterWeb.Data.Migrations
                     b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("IdNumber");
-
-                    b.HasOne("HotterWeb.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
                 });
 
             modelBuilder.Entity("HotterWeb.Models.Manager", b =>

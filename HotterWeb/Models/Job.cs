@@ -21,14 +21,10 @@ namespace HotterWeb.Models
         
         public virtual ApplicationUser ApplicationUser { get; set; }
         
-        //public Job() { }
-        /*
-        public Job(string Id, string Title,string IDN)
-        {
-            IdNumber = Id;
-            JobTitle = Title;
-        }
-        */
+        [ForeignKey("Location")]
+        public string LocationId { get; set; }
+
+        public virtual Location Location { get; set; }
         
         public class JobDBContext : DbContext
         {

@@ -11,9 +11,10 @@ using System;
 namespace HotterWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180728155906_as")]
+    partial class @as
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,13 +85,9 @@ namespace HotterWeb.Data.Migrations
 
                     b.Property<string>("JobTitle");
 
-                    b.Property<string>("LocationId");
-
                     b.HasKey("ID");
 
                     b.HasIndex("IdNumber");
-
-                    b.HasIndex("LocationId");
 
                     b.ToTable("Job");
                 });
@@ -107,24 +104,6 @@ namespace HotterWeb.Data.Migrations
                     b.HasKey("LocationId");
 
                     b.ToTable("Location");
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.Manager", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("IdNumber");
-
-                    b.Property<string>("LocationId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdNumber");
-
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("Manager");
                 });
 
             modelBuilder.Entity("HotterWeb.Models.RequestOff", b =>
@@ -156,15 +135,11 @@ namespace HotterWeb.Data.Migrations
 
                     b.Property<string>("IdNumber");
 
-                    b.Property<string>("LocationName");
-
                     b.Property<string>("Position");
 
                     b.HasKey("ID");
 
                     b.HasIndex("IdNumber");
-
-                    b.HasIndex("LocationName");
 
                     b.ToTable("Schedule");
                 });
@@ -302,21 +277,6 @@ namespace HotterWeb.Data.Migrations
                     b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("IdNumber");
-
-                    b.HasOne("HotterWeb.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
-                });
-
-            modelBuilder.Entity("HotterWeb.Models.Manager", b =>
-                {
-                    b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("IdNumber");
-
-                    b.HasOne("HotterWeb.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
                 });
 
             modelBuilder.Entity("HotterWeb.Models.RequestOff", b =>
@@ -331,10 +291,6 @@ namespace HotterWeb.Data.Migrations
                     b.HasOne("HotterWeb.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("IdNumber");
-
-                    b.HasOne("HotterWeb.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationName");
                 });
 
             modelBuilder.Entity("HotterWeb.Models.UnavailableTime", b =>

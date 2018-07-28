@@ -19,7 +19,9 @@ namespace HotterWeb.Models
         
         public virtual ApplicationUser ApplicationUser { get; set; }
 
+        [DataType(DataType.Date)]
         public DateTime Day { get; set; }
+
         public string BeginningTime { get; set; }
         public string EndTime { get; set; }
         
