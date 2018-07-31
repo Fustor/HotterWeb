@@ -68,14 +68,14 @@ namespace HotterWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,JobTitle,IdNumber")] Job job)
+        public async Task<IActionResult> Create([Bind("ID,JobTitle,IdNumber,LocationId")] Job job)
         {
             if (ModelState.IsValid)
             {
                 
                 if(job.JobTitle == "Manager" || job.JobTitle == "manager")
                 {
-                    var manager = new Manager() { IdNumber = job.IdNumber, LocationId = job.LocationId };//Location id is null right here,  fix!!
+                    var manager = new Manager() { IdNumber = job.IdNumber, LocationId = job.LocationId };//DONE: Location id is null right here,  fix!! -- Added LocationId to Create([Bind(.... in line 71 above 
                     _context.Manager.Add(manager);
                     await _context.SaveChangesAsync();
 

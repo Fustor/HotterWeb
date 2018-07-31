@@ -18,10 +18,10 @@ namespace HotterWeb.Models
 
         public virtual ApplicationUser ApplicationUser { get; set; }
 
-        [ForeignKey("Location")]
-        public string LocationName { get; set; }
+        //[ForeignKey("Location")]
+        public string LocationId{ get; set; }
 
-        public virtual Location Location { get; set; }
+        //public virtual Location Location { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime Day { get; set; }

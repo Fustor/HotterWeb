@@ -52,7 +52,7 @@ namespace HotterWeb.Controllers
         public IActionResult Create()
         {
             ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["LocationName"] = new SelectList(_context.Location, "LocationName", "LocationName");
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId");
             return View();
         }
 
@@ -61,7 +61,7 @@ namespace HotterWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,IdNumber,Day,ClockIn,ClockOut,Position")] Schedule schedule)
+        public async Task<IActionResult> Create([Bind("ID,IdNumber,Day,ClockIn,ClockOut,Position,LocationId")] Schedule schedule)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +71,7 @@ namespace HotterWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", schedule.IdNumber);
-            ViewData["LocationName"] = new SelectList(_context.Location, "LocationName", "LocationName", schedule.LocationName);
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId", schedule.LocationId);
             return View(schedule);
         }
 
@@ -89,7 +89,7 @@ namespace HotterWeb.Controllers
                 return NotFound();
             }
             ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", schedule.IdNumber);
-            ViewData["LocationName"] = new SelectList(_context.Location, "LocationName", "LocationName", schedule.LocationName);
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId", schedule.LocationId);
             return View(schedule);
         }
 
@@ -98,7 +98,7 @@ namespace HotterWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("ID,IdNumber,Day,ClockIn,ClockOut,Position")] Schedule schedule)
+        public async Task<IActionResult> Edit(Guid id, [Bind("ID,IdNumber,Day,ClockIn,ClockOut,Position,LocationId")] Schedule schedule)
         {
             if (id != schedule.ID)
             {
@@ -126,7 +126,7 @@ namespace HotterWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", schedule.IdNumber);
-            ViewData["LocationName"] = new SelectList(_context.Location, "LocationName", "LocationName", schedule.LocationName);
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId", schedule.LocationId);
             return View(schedule);
         }
 
