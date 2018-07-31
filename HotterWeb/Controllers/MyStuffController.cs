@@ -23,12 +23,13 @@ namespace HotterWeb.Controllers
             MyStuffViewModel MyStuffView = new MyStuffViewModel();
             if (_context.Manager.Any(m => m.IdNumber == UserId))
             {
+                Response.Redirect("/ManagerStuff");//user ManagerStuffViewModel instead
                 string _LocationId = _context.Manager.Where(m => m.IdNumber == UserId).Select(s => s.LocationId).SingleOrDefault();//gets location id from manager id
                 MyStuffView.ScheduleData = _context.Schedule.Where(s => s.LocationId == _LocationId).ToList();//gets all schedules from certain location id
                 MyStuffView.JobData = _context.Job.Where(j => j.IdNumber == UserId).ToList();
                 MyStuffView.RequestOffData = _context.RequestOff.Where(r => r.IdNumber == UserId).ToList();
                 MyStuffView.UnavailableTimeData = _context.UnavailableTime.Where(u => u.IdNumber == UserId).ToList();
-
+                //return View(ManagerStuffView); Or maybe take care of in ManagerStuffViewController
             }
             else
             { //TODO: allow users to make requests off and change their availablity? maybe not availability

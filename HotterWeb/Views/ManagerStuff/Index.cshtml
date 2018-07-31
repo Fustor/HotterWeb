@@ -1,0 +1,153 @@
+﻿@model HotterWeb.Models.ManagerStuffViewModel
+@{
+    ViewData["Title"] = "Manager Stuff";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    
+}
+<h2>Schedules</h2>
+
+<table class="table">
+      <thead>
+          <tr>
+              <th>
+                  Position
+              </th>
+              <th>
+                  Date
+              </th>
+              <th>
+                  Clock In
+              </th>
+              <th>
+                  Clock Out
+              </th>
+              <th>
+                  Id
+              </th>
+          </tr>
+      </thead>  
+    <tbody>
+
+        @foreach (var item in Model.ScheduleData)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Day)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClockIn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClockOut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdNumber)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Jobs</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Job
+            </th>
+            <th>
+                Id
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.JobData)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.JobTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdNumber)
+            </td>
+
+        </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Requests Off</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Day
+            </th>
+            <th>
+                Id
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.RequestOffData)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DayOff)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdNumber)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Unavailable Times</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Day
+            </th>
+            <th>
+                Start
+            </th>
+            <th>
+                End
+            </th>
+            <th>
+                Id
+            </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.UnavailableTimeData)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Day)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BeginningTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdNumber)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
