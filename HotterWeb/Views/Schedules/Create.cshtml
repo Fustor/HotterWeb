@@ -40,6 +40,9 @@
                 <input asp-for="Position" class="form-control" />
                 <span asp-validation-for="Position" class="text-danger"></span>
             </div>
+            <p style="color:red">
+                @TempData["Error"]
+            </p>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>

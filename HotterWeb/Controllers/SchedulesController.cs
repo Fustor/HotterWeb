@@ -65,6 +65,7 @@ namespace HotterWeb.Controllers
         {
             ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id");
             ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId");
+            
             return View();
         }
 
@@ -78,9 +79,20 @@ namespace HotterWeb.Controllers
             if (ModelState.IsValid)
             {
                 schedule.ID = Guid.NewGuid();
-                _context.Add(schedule);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var _employeeOff = _context.RequestOff.Where(r => r.IdNumber == schedule.IdNumber);
+                var _employeeUnavailable = _context.UnavailableTime.Where(u => u.IdNumber == schedule.IdNumber);
+                if (_employeeOff.Any(e => e.DayOff == schedule.Day) || _employeeUnavailable.Any(e=> e.Day == schedule.Day))
+                {
+                    TempData["Error"] = "Schedule conflicts with either request off or unavailable time.";
+                    return RedirectToAction(nameof(Create));
+                }
+                else
+                {
+                    _context.Add(schedule);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                
             }
             ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", schedule.IdNumber);
             ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId", schedule.LocationId);
