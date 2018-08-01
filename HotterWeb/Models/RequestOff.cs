@@ -22,7 +22,11 @@ namespace HotterWeb.Models
         [DataType(DataType.Date)]
         public DateTime DayOff { get; set; }
 
-        
+        //[ForeignKey("Location")]
+        public string LocationId { get; set; }
+
+        //public virtual Location Location { get; set; }
+
 
         public class RequestOffDBContext : DbContext
         {

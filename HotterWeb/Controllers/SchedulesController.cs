@@ -25,8 +25,20 @@ namespace HotterWeb.Controllers
         {
             var UserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);//gets the userId 
 
-            var applicationDbContext = _context.Schedule.Where(j => j.IdNumber == UserId);//selects Schedules with specific userid
-            return View(await applicationDbContext.ToListAsync());
+            if (_context.Manager.Any(m => m.IdNumber == UserId))
+            {
+                string _LocationId = _context.Manager.Where(m => m.IdNumber == UserId).Select(s => s.LocationId).SingleOrDefault();//gets location id from manager id
+                var applicationDbContext = _context.Schedule.Where(j => j.LocationId == _LocationId);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                Response.Redirect("/MyStuff");
+                
+                var applicationDbContext = _context.Schedule.Where(j => j.IdNumber == UserId);//selects jobs with specific userid
+                return View(await applicationDbContext.ToListAsync());
+
+            }
         }
 
         // GET: Schedules/Details/5

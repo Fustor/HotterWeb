@@ -25,8 +25,18 @@ namespace HotterWeb.Controllers
         {
             var UserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);//gets the userId 
 
-            var applicationDbContext = _context.RequestOff.Where(j => j.IdNumber == UserId);//selects Requests off with specific userid
-            return View(await applicationDbContext.ToListAsync());
+            if (_context.Manager.Any(m => m.IdNumber == UserId))
+            {
+                string _LocationId = _context.Manager.Where(m => m.IdNumber == UserId).Select(s => s.LocationId).SingleOrDefault();//gets location id from manager id
+                var applicationDbContext = _context.RequestOff.Where(j => j.LocationId == _LocationId);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                var applicationDbContext = _context.RequestOff.Where(j => j.IdNumber == UserId);//selects jobs with specific userid
+                return View(await applicationDbContext.ToListAsync());
+
+            }
         }
 
         // GET: RequestOffs/Details/5
@@ -52,6 +62,7 @@ namespace HotterWeb.Controllers
         public IActionResult Create()
         {
             ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId");
             return View();
         }
 
@@ -60,16 +71,18 @@ namespace HotterWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,IdNumber,DayOff")] RequestOff requestOff)
+        public async Task<IActionResult> Create([Bind("ID,IdNumber,DayOff,LocationId")] RequestOff requestOff)
         {
             if (ModelState.IsValid)
             {
+                requestOff.IdNumber = this.User.FindFirstValue(ClaimTypes.NameIdentifier);//gets the userId
                 requestOff.ID = Guid.NewGuid();
                 _context.Add(requestOff);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["IdNumber"] = new SelectList(_context.Users, "Id", "Id", requestOff.IdNumber);
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId");
             return View(requestOff);
         }
 

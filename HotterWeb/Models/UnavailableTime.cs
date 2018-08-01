@@ -24,9 +24,12 @@ namespace HotterWeb.Models
 
         public string BeginningTime { get; set; }
         public string EndTime { get; set; }
-        
 
-        
+        //[ForeignKey("Location")]
+        public string LocationId { get; set; }
+
+        //public virtual Location Location { get; set; }
+
 
         public class UnavailableTimeDBContext : DbContext
         {

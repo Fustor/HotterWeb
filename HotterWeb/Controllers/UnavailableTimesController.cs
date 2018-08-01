@@ -25,8 +25,18 @@ namespace HotterWeb.Controllers
         {
             var UserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);//gets the userId 
 
-            var applicationDbContext = _context.UnavailableTime.Where(j => j.IdNumber == UserId);//selects Schedules with specific userid
-            return View(await applicationDbContext.ToListAsync());
+            if (_context.Manager.Any(m => m.IdNumber == UserId))
+            {
+                string _LocationId = _context.Manager.Where(m => m.IdNumber == UserId).Select(s => s.LocationId).SingleOrDefault();//gets location id from manager id
+                var applicationDbContext = _context.UnavailableTime.Where(j => j.LocationId == _LocationId);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                var applicationDbContext = _context.UnavailableTime.Where(j => j.IdNumber == UserId);//selects jobs with specific userid
+                return View(await applicationDbContext.ToListAsync());
+
+            }
         }
 
         // GET: UnavailableTimes/Details/5
@@ -50,6 +60,7 @@ namespace HotterWeb.Controllers
         // GET: UnavailableTimes/Create
         public IActionResult Create()
         {
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId");
             return View();
         }
 
@@ -62,11 +73,13 @@ namespace HotterWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                unavailableTime.ID = Guid.NewGuid();
+                unavailableTime.IdNumber = this.User.FindFirstValue(ClaimTypes.NameIdentifier);//gets the userId
+                unavailableTime.ID = Guid.NewGuid();    
                 _context.Add(unavailableTime);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["LocationId"] = new SelectList(_context.Location, "LocationId", "LocationId");
             return View(unavailableTime);
         }
 
